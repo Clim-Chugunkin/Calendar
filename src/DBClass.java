@@ -1,7 +1,5 @@
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
+import java.util.HashMap;
 
 public class DBClass {
     Connection myConn = null;
@@ -35,18 +33,42 @@ public class DBClass {
         }
     }
 
-    public String execSQL(){
-        try{
-            String tables = "";
+    public HashMap<Key, HashMap<String,String>> getData(int month){
+        String query = "select * from day where month in(" + (month - 1) + ","
+                + month + "," + (month + 1) + ")";
+        HashMap<Key, HashMap<String,String>> data = new HashMap<>();
+        try {
+            results = myStmt.executeQuery(query);
+            //variables temporary
+            HashMap<String, String> row;
+            Key key = new Key(0,0);
+            int day = 0;
+            int monthNumber = 0;
+            String resultStr = "";
 
-            ResultSet results = myStmt.executeQuery("select * from brend");
-
-            while(results.next()){
-                tables+=results.getString(2)+" ";
+            while (results.next()) {
+                row = new HashMap<>();
+                for(int i = 1;i<results.getMetaData().getColumnCount()+1;i++){
+                    resultStr = results.getString(i);
+                    switch(results.getMetaData().getColumnName(i)){
+                        case MyCalendar.MONTH ->{
+                            monthNumber = Integer.parseInt(resultStr);
+                        }
+                        case MyCalendar.DAY ->{
+                            day = Integer.parseInt(resultStr);
+                        }
+                        default -> {
+                            row.put(results.getMetaData().getColumnName(i),
+                                    resultStr);
+                        }
+                    }
+                }
+                key = new Key(monthNumber,day);
+                data.put(key,row);
             }
-            return tables;
-        }catch(Exception e){
-            return "failed to read from DataBase";
+        } catch (SQLException e) {
+            System.out.println(e.toString());
         }
+        return data;
     }
 }

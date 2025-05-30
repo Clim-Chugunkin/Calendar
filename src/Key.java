@@ -24,7 +24,7 @@ public class Key {
     }
     @Override
     public boolean equals(Object aKey){
-        Key k = (Key) aKey;
+        if (!(aKey instanceof Key k)) return false;
         return (this.month == k.getMonth()) && (this.day == k.getDay());
     }
     @Override

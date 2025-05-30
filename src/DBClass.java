@@ -41,33 +41,30 @@ public class DBClass {
             results = myStmt.executeQuery(query);
             //variables temporary
             HashMap<String, String> row;
-            Key key = new Key(0,0);
+            Key key ;
             int day = 0;
             int monthNumber = 0;
-            String resultStr = "";
+            String resultStr;
 
             while (results.next()) {
                 row = new HashMap<>();
                 for(int i = 1;i<results.getMetaData().getColumnCount()+1;i++){
                     resultStr = results.getString(i);
                     switch(results.getMetaData().getColumnName(i)){
-                        case MyCalendar.MONTH ->{
-                            monthNumber = Integer.parseInt(resultStr);
-                        }
-                        case MyCalendar.DAY ->{
-                            day = Integer.parseInt(resultStr);
-                        }
-                        default -> {
-                            row.put(results.getMetaData().getColumnName(i),
+                        case MyCalendar.MONTH -> monthNumber = Integer.parseInt(resultStr);
+
+                        case MyCalendar.DAY -> day = Integer.parseInt(resultStr);
+
+                        default -> row.put(results.getMetaData().getColumnName(i),
                                     resultStr);
-                        }
+
                     }
                 }
                 key = new Key(monthNumber,day);
                 data.put(key,row);
             }
         } catch (SQLException e) {
-            System.out.println(e.toString());
+            System.out.println(e);
         }
         return data;
     }

@@ -1,7 +1,6 @@
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
 
 public class MyCalendarTest {
     private MyCalendar<DataTest> calendar;
@@ -16,6 +15,7 @@ public class MyCalendarTest {
             System.out.println("day " + day.getKey().getDay()
                     + " month " + day.getKey().getMonth()
                     + " steps " + day.getData().getSteps()
-                    + "distance " + day.getData().getDistance());
+                    + " distance " + day.getData().getDistance()
+                    + " Speed " + day.getData().getSpeed());
     }
 }

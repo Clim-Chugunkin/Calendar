@@ -28,18 +28,25 @@ public class MyCalendar<T> {
         db.closeDB();
 
         Key key = new Key(0,0);
-        HashMap<String,String> row;
         for (DayView<T> dayView : month.getMonthView()){
             key.setDay(dayView.getKey().getDay());
             key.setMonth(dayView.getKey().getMonth());
             T clazz = null;
             try{
                 clazz = type.getDeclaredConstructor().newInstance();
+                Field [] fields = clazz.getClass().getDeclaredFields();
                 if (data.containsKey(key)){
-                    for (String field : data.get(key).keySet()){
-                        Field classField = clazz.getClass().getDeclaredField(field);
-                        classField.setAccessible(true);
-                        classField.set(clazz,Integer.parseInt(data.get(key).get(field)));
+                    for (Field field : fields){
+                        if (data.get(key).containsKey(field.getName())) {
+                            field.setAccessible(true);
+                            //check field type
+
+                            if (field.getType().equals(int.class))
+                                field.set(clazz,Integer.parseInt(data.get(key).get(field.getName())));
+                            else if (field.getType().equals(double.class))
+                                field.set(clazz,Double.parseDouble(data.get(key).get(field.getName())));
+                            else field.set(clazz,data.get(key).get(field.getName()));
+                        }
                     }
                 }
 

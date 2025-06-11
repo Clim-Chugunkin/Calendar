@@ -23,4 +23,12 @@ public class DataTest {
     public double getSpeed(){
         return speed;
     }
+
+    public void setDistance(int distance) {
+        this.distance = distance;
+    }
+
+    public void setSpeed(double speed) {
+        this.speed = speed;
+    }
 }

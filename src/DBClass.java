@@ -68,4 +68,7 @@ public class DBClass {
         }
         return data;
     }
+    public void setData(HashMap<Key,HashMap<String,String>> data){
+
+    }
 }

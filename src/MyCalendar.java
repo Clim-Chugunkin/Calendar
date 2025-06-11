@@ -32,6 +32,7 @@ public class MyCalendar<T> {
             key.setDay(dayView.getKey().getDay());
             key.setMonth(dayView.getKey().getMonth());
             T clazz = null;
+
             try{
                 clazz = type.getDeclaredConstructor().newInstance();
                 Field [] fields = clazz.getClass().getDeclaredFields();
@@ -49,7 +50,6 @@ public class MyCalendar<T> {
                         }
                     }
                 }
-
             }catch(Exception ex){
                 System.out.println("unable to convert class");
             }finally {
@@ -58,5 +58,21 @@ public class MyCalendar<T> {
         }
 
         return month.getMonthView();
+    }
+    public HashMap<String,String> setData(int day,int month, T data){
+        db = new DBClass("test","root","root");
+        HashMap<String,String> dataDB = new HashMap<>();
+        Field[] fields = data.getClass().getDeclaredFields();
+        String fieldValue;
+        for (Field field : fields){
+            try{
+                field.setAccessible(true);
+                fieldValue = field.get(data).toString();
+                dataDB.put(field.getName(),fieldValue);
+            }catch(Exception ex){
+                ;
+            }
+        }
+        return dataDB;
     }
 }

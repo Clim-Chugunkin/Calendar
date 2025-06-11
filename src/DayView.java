@@ -1,7 +1,8 @@
 public class DayView<T> {
-    private Key key;
+
     private T data ;
     private boolean isActive = true;
+    Key key;
 
     public void setKey(Key key){
         this.key = key;

@@ -7,6 +7,7 @@ public class MyCalendarTest {
     @Before
     public void setUp()  {
         calendar = new MyCalendar<>(DataTest.class);
+        calendar.setSource(new DBClass("test","root","root"));
     }
 
     @Test
@@ -22,7 +23,7 @@ public class MyCalendarTest {
     public void setDay(){
         DataTest data = new DataTest();
         data.setSteps(2250);
-        data.setDistance(132);
+        data.setDistance(232);
         data.setSpeed(85.8);
         calendar.setData(new Key(2,28),data);
         //calendar.setData(1,1,data);

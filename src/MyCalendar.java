@@ -5,7 +5,7 @@ import java.util.List;
 public class MyCalendar<T> {
 
     private MonthView<T> month;
-    private DBClass db;
+    private DataSource db;
     private  Class<T> type;
 
     public static final String MONTH = "month";
@@ -16,6 +16,10 @@ public class MyCalendar<T> {
         this.type = type;
     }
 
+    public void setSource(DataSource source){
+        db = source;
+    }
+
     public List<DayView<T>> getMonth(int monthNumber){
 
         //create and fill container month (occupied with day and month)
@@ -23,9 +27,7 @@ public class MyCalendar<T> {
         month.setCurrentMonth(monthNumber);
 
         //get data from dataBase
-        db = new DBClass("test","root","root");
         HashMap<Key, HashMap<String,String>> data = db.getData(monthNumber);
-        db.closeDB();
 
         Key key = new Key(0,0);
         for (DayView<T> dayView : month.getMonthView()){
@@ -60,7 +62,6 @@ public class MyCalendar<T> {
         return month.getMonthView();
     }
     public void setData(Key key, T data){
-        db = new DBClass("test","root","root");
         HashMap<String,String> dataDB = new HashMap<>();
         Field[] fields = data.getClass().getDeclaredFields();
         String fieldValue;
@@ -74,6 +75,5 @@ public class MyCalendar<T> {
             }
         }
         db.setData(key,dataDB);
-        db.closeDB();
     }
 }

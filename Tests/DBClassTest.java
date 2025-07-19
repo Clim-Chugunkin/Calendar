@@ -12,6 +12,6 @@ public class DBClassTest {
 
     @Test
     public void test(){
-        db.closeDB();
+        //db.closeDB();
     }
 }

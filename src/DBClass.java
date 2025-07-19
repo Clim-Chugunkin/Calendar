@@ -1,5 +1,6 @@
 import java.sql.*;
 import java.util.HashMap;
+import java.util.Map;
 
 public class DBClass {
     Connection myConn = null;
@@ -68,7 +69,35 @@ public class DBClass {
         }
         return data;
     }
-    public void setData(HashMap<Key,HashMap<String,String>> data){
+    public void setData(Key key, HashMap<String, String> data) {
+        //check if key exists
+        String query = "SELECT count(*) size FROM day where day = "+ key.getDay()+ " AND month = " + key.getMonth();
+        try{
+            results = myStmt.executeQuery(query);
+            results.next();
+            if (Integer.parseInt(results.getString(1)) != 0 ){
+                query = "UPDATE day SET ";
+                for (Map.Entry<String,String> entry : data.entrySet()){
+                    query += (entry.getKey() + " = " + "'" +entry.getValue() +  "',");
+                }
+                query =  query.substring(0,query.length()-1)
+                         + " where day = " + key.getDay() + " AND "
+                            + "month = " + key.getMonth();
+            }else{
+                String names = "(day,month";
+                String values = "(" + key.getDay() + "," + key.getMonth();
+                for (Map.Entry<String,String> entry : data.entrySet()){
+                    names+=("," + entry.getKey());
+                    values+=("," + entry.getValue());
+                }
+                names+=")";
+                values+=")";
+                query = "INSERT INTO day " + names + " VALUES" + values;
+            }
+            myStmt.executeUpdate(query);
 
+        }catch(Exception ex){
+            System.out.println(ex);;
+        }
     }
 }

@@ -59,7 +59,7 @@ public class MyCalendar<T> {
 
         return month.getMonthView();
     }
-    public HashMap<String,String> setData(int day,int month, T data){
+    public void setData(Key key, T data){
         db = new DBClass("test","root","root");
         HashMap<String,String> dataDB = new HashMap<>();
         Field[] fields = data.getClass().getDeclaredFields();
@@ -73,6 +73,7 @@ public class MyCalendar<T> {
                 ;
             }
         }
-        return dataDB;
+        db.setData(key,dataDB);
+        db.closeDB();
     }
 }

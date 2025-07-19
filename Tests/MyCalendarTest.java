@@ -11,7 +11,7 @@ public class MyCalendarTest {
 
     @Test
     public void getMonth() {
-        for (DayView<DataTest> day : calendar.getMonth(3))
+        for (DayView<DataTest> day : calendar.getMonth(1))
             System.out.println("day " + day.getKey().getDay()
                     + " month " + day.getKey().getMonth()
                     + " steps " + day.getData().getSteps()
@@ -21,10 +21,10 @@ public class MyCalendarTest {
     @Test
     public void setDay(){
         DataTest data = new DataTest();
-        data.setSteps(1250);
-        data.setDistance(23);
-        data.setSpeed(15.8);
-        System.out.println(calendar.setData(5,1,data));
+        data.setSteps(2250);
+        data.setDistance(132);
+        data.setSpeed(85.8);
+        calendar.setData(new Key(2,28),data);
         //calendar.setData(1,1,data);
     }
 }

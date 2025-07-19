@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="mysql">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/../../calendar-storage/calendar-storage/lib/mysql.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

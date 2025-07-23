@@ -8,6 +8,9 @@ public class DBClass implements DataSource{
     String error = "";
     ResultSet results;
 
+    private final Map<String, String> typesConverter = new HashMap<>();
+    private  String tableName;
+
     private final String name;
     private final String user;
     private final String password;
@@ -15,6 +18,9 @@ public class DBClass implements DataSource{
         this.name = name;
         this.user = user;
         this.password = password;
+        typesConverter.put(int.class.getName(), "INT");
+        typesConverter.put(String.class.getName(), "VARCHAR(256)");
+        typesConverter.put(double.class.getName(), "DOUBLE" );
     }
     private boolean openConnection(){
         try {
@@ -47,7 +53,7 @@ public class DBClass implements DataSource{
     @Override
     public HashMap<Key, HashMap<String,String>> getData(int month){
         if (openConnection()){
-            String query = "select * from day where month in(" + (month - 1) + ","
+            String query = "select * from " + tableName + " where month in(" + (month - 1) + ","
                     + month + "," + (month + 1) + ")";
             HashMap<Key, HashMap<String,String>> data = new HashMap<>();
             try {
@@ -92,12 +98,12 @@ public class DBClass implements DataSource{
     public void setData(Key key, HashMap<String, String> data) {
         //check if key exists
         if (openConnection()){
-            String query = "SELECT count(*) size FROM day where day = "+ key.getDay()+ " AND month = " + key.getMonth();
+            String query = "SELECT count(*) size FROM " +  tableName  + " where day = "+ key.getDay()+ " AND month = " + key.getMonth();
             try{
                 results = myStmt.executeQuery(query);
                 results.next();
                 if (Integer.parseInt(results.getString(1)) != 0 ){
-                    query = "UPDATE day SET ";
+                    query = "UPDATE" + tableName +  " SET ";
                     for (Map.Entry<String,String> entry : data.entrySet()){
                         query += (entry.getKey() + " = " + "'" +entry.getValue() +  "',");
                     }
@@ -113,7 +119,7 @@ public class DBClass implements DataSource{
                     }
                     names+=")";
                     values+=")";
-                    query = "INSERT INTO day " + names + " VALUES" + values;
+                    query = "INSERT INTO " + tableName + names + " VALUES" + values;
                 }
                 myStmt.executeUpdate(query);
 
@@ -124,4 +130,25 @@ public class DBClass implements DataSource{
             }
         }
     }
+
+    @Override
+    public void createTable(String tableName, Map<String, String> data) {//fields name + fields type
+        this.tableName = tableName;
+        if (openConnection()){
+            StringBuilder query = new StringBuilder("CREATE TABLE IF NOT EXISTS " + tableName + "(" +
+                    "day INT, month INT, ");
+            for(Map.Entry<String,String> entry : data.entrySet()){
+                query.append(entry.getKey()).append(" ");
+                query.append(typesConverter.getOrDefault(entry.getValue(),"VARCHAR(200)")).append(" ,");
+            }
+            query.deleteCharAt(query.length()-1).append(")");
+            try{
+                myStmt.executeUpdate(query.toString());
+            }catch(Exception ex){
+                ;
+            }
+        }
+    }
+
+
 }

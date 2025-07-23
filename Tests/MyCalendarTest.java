@@ -25,7 +25,11 @@ public class MyCalendarTest {
         data.setSteps(2250);
         data.setDistance(232);
         data.setSpeed(85.8);
-        calendar.setData(new Key(2,28),data);
+        calendar.setData(new Key(1,28),data);
         //calendar.setData(1,1,data);
+    }
+    @Test
+    public void createTableTest(){
+        //calendar.createTable();
     }
 }

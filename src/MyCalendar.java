@@ -1,6 +1,7 @@
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MyCalendar<T> {
 
@@ -18,6 +19,7 @@ public class MyCalendar<T> {
 
     public void setSource(DataSource source){
         db = source;
+        createTable();
     }
 
     public List<DayView<T>> getMonth(int monthNumber){
@@ -75,5 +77,14 @@ public class MyCalendar<T> {
             }
         }
         db.setData(key,dataDB);
+    }
+
+    public void createTable(){
+        Field [] fields = type.getDeclaredFields();
+        Map<String, String> data = new HashMap<>();
+        for (Field field : fields){
+            data.put(field.getName(), field.getType().getName());
+        }
+        db.createTable(type.getName(),data);
     }
 }
